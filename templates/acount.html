@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br/>
+<div class="container-md">
+    <h1>{{ account['page'] }}</h1>
+    <br/>
+
+    <div class="form-group">
+        <label>Mail o usuari:</label>
+        <input type="text" name="mail"
+           placeholder="Mail | Usuari" class="form-control"
+           value="{{ request.form['mail'] or account['mail']}}" required/>
+    </div>
+
+     <div class="form-group">
+        <label>Clau d'acces</label>
+        <input type="text" name="contra"
+           placeholder="Clau" class="form-control"
+           value="{{ request.form['contra'] or account['contra']}}" required/>
+    </div>
+
+    <div class="form-group">
+        <label>2Factor</label>
+        <input type="text" name="fact"
+           placeholder="2Fact" class="form-control"
+           value="{{ request.form['fact'] or account['fact']}}"/>
+    </div>
+    <hr>
+    <div class="form-group float-right">
+        <button type="submit" class="btn btn-primary" style="margin-right: 10px">Submit</button>
+        <form action="{{ url_for('delete', id=account['id']) }}" method="POST">
+            <input type="submit" value="Delete Post"
+                    class="btn btn-danger"
+                    onclick="return confirm('Estas segur que vols eliminar aquesta conta?')"/>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS posts;
+
+CREATE TABLE accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    page TEXT NOT NULL,
+    mail TEXT NOT NULL,
+    contra TEXT NOT NULL,
+    keys TEXT,
+    fact TEXT
+);

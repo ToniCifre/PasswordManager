@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>
+    function encrypt() {
+        const passw = document.getElementById('password').value;
+        if (passw!==''){
+            const hash = CryptoJS.SHA256();
+            document.getElementById('password').value = hash.toString(CryptoJS.enc.Base64);
+        }else {return false;}
+
+        const key = CryptoJS.enc.Utf8.parse('Qa//Ze?Bf1g<s@"I-S6.=fg?');
+        const text = document.getElementById('contra').value;
+        const iv = CryptoJS.lib.WordArray.random(16);
+        const encrypted = CryptoJS.AES.encrypt(text, key, {iv: iv});
+        document.getElementById('contra').value = iv.concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+
+        return true;
+    }
+</script>
+
+<a class="float-left back-button" href="{{url_for('index')}}">
+    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor"
+         xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+    </svg>
+</a>
+<div class="container-sm">
+    <br>
+    <h1>{% block title %} Crear Nova Conta {% endblock %}</h1>
+    <br>
+    <form method="post">
+        <div class="form-group">
+            <label>Plataforma</label>
+            <input type="text" name="page"
+                   placeholder="Plataforma" class="form-control"
+                   value="{{ request.form['title'] }}" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Mail o usuari</label>
+            <input type="text" name="mail"
+                   placeholder="Mail | Usuari" class="form-control"
+                   value="{{ request.form['mail'] }}" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Clau d'acces</label>
+            <input type="text" name="contra" id="contra"
+                   placeholder="Clau" class="form-control"
+                   value="{{ request.form['contra'] }}" required/>
+        </div>
+
+        <div class="form-group">
+            <label>2Factor</label>
+            <input type="text" name="fact"
+                   placeholder="2Fact" class="form-control"
+                   value="{{ request.form['fact'] }}"/>
+        </div>
+        <hr/>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="add-button float-right" data-toggle="modal" data-target="#passwordModal">
+            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
+                <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
+            </svg>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5>Password</h5>
+                        <div class="form-row">
+                            <div class="col-8">
+                                <input type="password" name="password" id="password" placeholder="Password" class="form-control" value="{{ request.form['password'] }}" required/>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-success form-control" onclick="return encrypt()">Crear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

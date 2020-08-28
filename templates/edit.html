@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a class="float-left back-button" href="{{url_for('index')}}">
+    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor"
+         xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+    </svg>
+</a>
+<br/>
+<div class="container-sm">
+    <h1>{% block title %} Edit "{{ account['page'] }}" {% endblock %}</h1>
+    <br/>
+    <form method="post">
+        <div class="form-group">
+            <label>Plataforma</label>
+            <input type="text" name="page"
+               placeholder="Plataforma" class="form-control"
+               value="{{ request.form['page'] or account['page'] }}"/>
+        </div>
+
+        <div class="form-group">
+            <label>Mail o usuari</label>
+            <input type="text" name="mail"
+               placeholder="Mail | Usuari" class="form-control"
+               value="{{ request.form['mail'] or account['mail']}}"/>
+        </div>
+
+         <div class="form-group">
+            <label>Clau d'acces</label>
+            <input type="text" name="contra"
+               placeholder="Clau" class="form-control"
+               value="{{ request.form['contra'] }}"/>
+        </div>
+
+        <div class="form-group">
+            <label>2Factor</label>
+            <input type="text" name="fact"
+               placeholder="2Fact" class="form-control"
+               value="{{ request.form['fact'] or account['fact']}}"/>
+        </div>
+        <hr>
+        <div class="form-group float-right">
+            <button type="submit" class="edit-button" style="margin-right: 10px">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                </svg>
+            </button>
+
+        </div>
+    </form>
+    <form action="{{ url_for('delete', id=account['id']) }}" method="POST">
+                <button type="submit" class="trash-button" onclick="return confirm('Estas segur que vols eliminar aquesta conta?')">
+                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                    </svg>
+                </button>
+            </form>
+</div>
+{% endblock %}

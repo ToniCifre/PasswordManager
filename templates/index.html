@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script>
+    function encrypt(item) {
+        const passw = document.getElementById($(item).attr('name')).value;
+        if (passw!==''){
+            const hash = CryptoJS.SHA256();
+            document.getElementById($(item).attr('name')).value = hash.toString(CryptoJS.enc.Base64);
+        }else {return false;}
+        return true;
+    }
+</script>
+<div class="container-md">
+    <br/>
+    <h1 style="display: inline">{% block title %} Password Manager {% endblock %}</h1>
+    <a style="color: white" class="float-right add-button" href="{{url_for('create')}}">
+        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
+            <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
+        </svg>
+    </a>
+    <br/>
+    <br/>
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Conta</th>
+            <th scope="col">Mail</th>
+            <th scope="col">Ultim Canvi</th>
+            <th scope="col">...</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for account in accounts %}
+        <tr>
+            <td><h4><a href="{{ url_for('edit', id=account['id']) }}" class="table-button">{{ account['page'] }}</a></h4></td>
+            <td>{{ account['mail'] }}</td>
+            <td>{{ account['created'] }}</td>
+            <td>
+                <a href="{{ url_for('edit', id=account['id']) }}" class="table-button" style="padding-right: inherit;">
+                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-pen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M5.707 13.707a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391L10.086 2.5a2 2 0 0 1 2.828 0l.586.586a2 2 0 0 1 0 2.828l-7.793 7.793zM3 11l7.793-7.793a1 1 0 0 1 1.414 0l.586.586a1 1 0 0 1 0 1.414L5 13l-3 1 1-3z"/>
+                        <path fill-rule="evenodd" d="M9.854 2.56a.5.5 0 0 0-.708 0L5.854 5.855a.5.5 0 0 1-.708-.708L8.44 1.854a1.5 1.5 0 0 1 2.122 0l.293.292a.5.5 0 0 1-.707.708l-.293-.293z"/>
+                        <path d="M13.293 1.207a1 1 0 0 1 1.414 0l.03.03a1 1 0 0 1 .03 1.383L13.5 4 12 2.5l1.293-1.293z"/>
+                    </svg>
+                </a>
+                <a href="{{ url_for('edit', id=account['id']) }}" class="table-button">
+                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-printer-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2H5z"/>
+                        <path fill-rule="evenodd" d="M11 9H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/>
+                        <path fill-rule="evenodd" d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2V7zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                    </svg>
+                </a>
+                <form action="{{ url_for('getpasw', id=account['id']) }}" method = "POST" class="form-table">
+                    <button type="button" class="button-table" data-toggle="modal" data-target="#modal{{ account['id'] }}">
+                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-clipboard-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path fill-rule="evenodd" d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3zm4.354 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                    </button>
+
+                    <div class="modal fade" id="modal{{ account['id'] }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h5>Password</h5>
+                                    <div class="form-row">
+                                        <div class="col-8">
+                                            <input type="password" name="password" id="password{{ account['id'] }}" placeholder="Password" class="form-control" value="{{ request.form['password'] }}" required/>
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-success form-control" name="password{{ account['id'] }}" onclick="encrypt(this)">Crear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+<!-- Modal -->
